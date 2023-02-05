@@ -4,6 +4,7 @@ namespace MohammadZarifiyan\LaravelChart\Scopes;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -19,7 +20,7 @@ class HasChartScope implements Scope
 	
 	public function extend(Builder $builder)
 	{
-		$builder->macro('exportForChart', function (Builder $builder, string $column, int $limit, Carbon $start, Carbon $end, CarbonInterval $interval, string $method, ...$params) {
+		$builder->macro('exportForChart', function (Builder $builder, string $column, int $limit, Carbon $start, Carbon $end, CarbonInterval $interval, Closure $closure) {
 			if ($limit < 1) {
 				throw new InvalidArgumentException('limit must not be less than one.');
 			}
@@ -32,9 +33,7 @@ class HasChartScope implements Scope
 					$start = $start->add($interval)->min($end)
 				]);
 				
-				$stack->push(
-					$query->{$method}(...$params)
-				);
+				$stack->push($closure($query));
 			}
 			
 			return $stack;
