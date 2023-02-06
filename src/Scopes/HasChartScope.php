@@ -20,7 +20,7 @@ class HasChartScope implements Scope
 	
 	public function extend(Builder $builder)
 	{
-		$builder->macro('exportForChart', function (Builder $builder, string $column, int $limit, Carbon $start, Carbon $end, CarbonInterval $interval, Closure $closure) {
+		$builder->macro('exportForChart', function (Builder $builder, string $column, int $limit, Carbon $start, CarbonInterval $interval, Closure $closure) {
 			if ($limit < 1) {
 				throw new InvalidArgumentException('limit must not be less than one.');
 			}
