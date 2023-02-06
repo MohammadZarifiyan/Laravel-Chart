@@ -30,7 +30,7 @@ class HasChartScope implements Scope
 			for ($i = 0; $i < $limit; $i++) {
 				$query = $builder->clone()->whereBetween($column, [
 					$start,
-					$start = $start->add($interval)
+					$start = $start->clone()->add($interval)
 				]);
 				
 				$stack->push($closure($query));
