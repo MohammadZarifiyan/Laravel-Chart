@@ -28,7 +28,7 @@ class HasChartScope implements Scope
 			$stack = new Collection;
 			
 			for ($i = 0; $i < $limit; $i++) {
-				$query = $builder->whereBetween($column, [
+				$query = $builder->clone()->whereBetween($column, [
 					$start,
 					$start = $start->add($interval)
 				]);
