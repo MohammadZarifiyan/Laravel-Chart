@@ -4,46 +4,39 @@ namespace MohammadZarifiyan\LaravelChart\Scopes;
 
 use Carbon\CarbonPeriod;
 use Closure;
-use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
 
 class HasChartScope implements Scope
 {
-	public function apply(Builder $builder, Model $model)
-	{
-		//
-	}
-	
-	public function extend(Builder $builder)
-	{
-		$builder->macro('exportForChart', function (Builder $builder, string|Closure $column, int $limit, DateTimeInterface $start, $interval, Closure $closure) {
-			if ($limit < 1) {
-				throw new InvalidArgumentException('limit must not be less than one.');
-			}
-			
-			$stack = new Collection;
-			
-			for ($i = 0; $i < $limit; $i++) {
+    public function apply(Builder $builder, Model $model)
+    {
+        //
+    }
+
+    public function extend(Builder $builder)
+    {
+        $builder->macro('exportForChart', function (Builder $builder, string|Closure $column, CarbonPeriod $period, Closure $closure) {
+            $stack = new Collection;
+
+            foreach ($period as $item) {
+                $end = $item->clone()->add($period->interval);
+                $between = CarbonPeriod::start($item)->setEndDate($end);
                 $clone = $builder->clone();
 
-                $period = CarbonPeriod::start($start)->setDateInterval($interval);
-
                 if ($column instanceof Closure) {
-                    $column($clone, $period);
+                    $column($clone, $between);
                 }
                 else {
-                    $clone->whereBetween($column, $period);
+                    $clone->whereBetween($column, $between);
                 }
 
-				$stack->push($closure($clone));
-                $start = $period->getEndDate();
-			}
-			
-			return $stack;
-		});
-	}
+                $stack->push($closure($clone));
+            }
+
+            return $stack;
+        });
+    }
 }
