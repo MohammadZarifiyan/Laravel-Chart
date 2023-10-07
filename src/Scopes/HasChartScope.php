@@ -2,9 +2,9 @@
 
 namespace MohammadZarifiyan\LaravelChart\Scopes;
 
-use Carbon\Carbon;
-use Carbon\CarbonInterval;
+use Carbon\CarbonPeriod;
 use Closure;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -20,7 +20,7 @@ class HasChartScope implements Scope
 	
 	public function extend(Builder $builder)
 	{
-		$builder->macro('exportForChart', function (Builder $builder, string $column, int $limit, Carbon $start, Carbon $end, CarbonInterval $interval, Closure $closure) {
+		$builder->macro('exportForChart', function (Builder $builder, string|Closure $column, int $limit, DateTimeInterface $start, $interval, Closure $closure) {
 			if ($limit < 1) {
 				throw new InvalidArgumentException('limit must not be less than one.');
 			}
@@ -28,12 +28,19 @@ class HasChartScope implements Scope
 			$stack = new Collection;
 			
 			for ($i = 0; $i < $limit; $i++) {
-				$query = $builder->clone()->whereBetween($column, [
-					$start,
-					$start = $start->clone()->add($interval)
-				]);
-				
-				$stack->push($closure($query));
+                $clone = $builder->clone();
+
+                $period = CarbonPeriod::start($start)->setDateInterval($interval);
+
+                if ($column instanceof Closure) {
+                    $column($clone, $period);
+                }
+                else {
+                    $clone->whereBetween($column, $period);
+                }
+
+				$stack->push($closure($clone));
+                $start = $period->getEndDate();
 			}
 			
 			return $stack;
