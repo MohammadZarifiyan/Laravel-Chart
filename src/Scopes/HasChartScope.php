@@ -18,22 +18,15 @@ class HasChartScope implements Scope
 
     public function extend(Builder $builder)
     {
-        $builder->macro('exportForChart', function (Builder $builder, string|Closure $column, CarbonPeriod $period, Closure $closure) {
+        $builder->macro('exportForChart', function (Builder $builder, CarbonPeriod $period, Closure $closure) {
             $stack = new Collection;
 
-            foreach ($period as $item) {
-                $end = $item->clone()->add($period->interval);
-                $between = CarbonPeriod::start($item)->setEndDate($end);
+            foreach ($period as $start) {
+                $end = $start->clone()->add($period->interval);
+                $between = CarbonPeriod::start($start)->setEndDate($end);
                 $clone = $builder->clone();
 
-                if ($column instanceof Closure) {
-                    $column($clone, $between);
-                }
-                else {
-                    $clone->whereBetween($column, $between);
-                }
-
-                $stack->push($closure($clone));
+                $stack->push($closure($clone, $between));
             }
 
             return $stack;

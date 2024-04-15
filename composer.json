@@ -3,7 +3,7 @@
 	"description": "A Laravel package that helps you to quickly create charts from database.",
 	"type": "library",
 	"keywords": ["Laravel", "Chart", "Eloquent-ORM", "Eloquent", "ORM"],
-	"version": "2.0.0",
+	"version": "3.0.0",
 	"license": "MIT",
 	"require": {
 		"php": "^8",
