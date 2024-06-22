@@ -1,5 +1,5 @@
 # Laravel Chart
-A Laravel package that helps you to easily export data for charts using Eloquent ORM.
+This Laravel package helps you to export data for charts using Eloquent ORM easily.
 ## Installation
 To install package, just run the following command in the root of your project:
 ```shell
@@ -9,12 +9,12 @@ composer require mohammad-zarifiyan/laravel-chart
 First you need to give trait `MohammadZarifiyan\LaravelChart\Traits\HasChart` to your model.
 Then use the `exportForChart` method to extract the information.
 1. The first parameter of this method must be an instance of `Carbon\CarbonPeriod` that specifies the beginning and end of the total time period.
-2. The second parameter of this method must be a closure whose first parameter is an instance of `Illuminate\Database\Eloquent\Builder` and the second parameter is an instance of `Carbon\CarbonPeriod`. In this closure, you must apply conditions to the `Illuminate\Database\Eloquent\Builder` that limit the data to the time period given by `Carbon\CarbonPeriod` and then return the desired information for your chart.
+2. The second parameter of this method must be a closure that its first parameter is an instance of `Illuminate\Database\Eloquent\Builder` and its second parameter is an instance of `Carbon\CarbonPeriod`. In this closure, you must apply conditions to the `Illuminate\Database\Eloquent\Builder` that limit the data to the time period given by `Carbon\CarbonPeriod` and then return the desired information for your chart.
 
-The result of this method is a collection that includes the information you returned in the closure and you can use them in your charts.
+The result of `exportForChart` method is an instance of `Illuminate\Support\Collection` that includes the data you returned in the closure, so you can use them in your charts.
 
 ### Example
-In the following example, we have calculated the sum of the amount column of the invoices at the end of **each day** in the period of **one week ago until now**.
+In the following example, we have calculated the sum of the `amount` column of the invoices at the end of **each day** in the period of **one week ago until now**.
 ```php
 <?php
 
@@ -74,7 +74,7 @@ Above code output will be something like this:
     80, // Sum amount, today (till now)
 ]
 ```
-You can also filter the table information based on a column in the relation. In the example below, we get the sum of the invoices amount based on their **payment time**.
+You can also filter the table information based on a column in a relation. In the example below, we get the sum of the invoices amount based on their **payment time**.
 ```php
 <?php
 
@@ -84,7 +84,9 @@ use Carbon\CarbonPeriod;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
-$start = Carbon::now()->subDays(6)->startOfDay();
+$start = Carbon::now()
+    ->subDays(6)
+    ->startOfDay();
 $end = Carbon::now();
 $interval = CarbonInterval::day();
 $period = CarbonPeriod::start($start)
