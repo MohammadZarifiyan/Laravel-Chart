@@ -52,9 +52,7 @@ use Illuminate\Database\Eloquent\Builder;
 $start = Carbon::now()->subDays(6)->startOfDay();
 $end = Carbon::now();
 $interval = CarbonInterval::day();
-$period = CarbonPeriod::start($start)
-    ->setEndDate($end)
-    ->setDateInterval($interval);
+$period = CarbonPeriod::start($start)->setEndDate($end)->setDateInterval($interval);
 
 $output = Invoice::exportForChart($period, function (Builder $builder, CarbonPeriod $period) {
     $builder->whereBetween('created_at', $period);
@@ -84,14 +82,10 @@ use Carbon\CarbonPeriod;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
-$start = Carbon::now()
-    ->subDays(6)
-    ->startOfDay();
+$start = Carbon::now()->subDays(6)->startOfDay();
 $end = Carbon::now();
 $interval = CarbonInterval::day();
-$period = CarbonPeriod::start($start)
-    ->setEndDate($end)
-    ->setDateInterval($interval);
+$period = CarbonPeriod::start($start)->setEndDate($end)->setDateInterval($interval);
     
 $output_for_chart = Invoice::exportForChart($period, function (Builder $builder, CarbonPeriod $period) {
     $builder->whereRelation('payment', fn (Builder $builder) => $builder->whereBetween('paid_at', $period));
