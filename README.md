@@ -3,7 +3,7 @@ This Laravel package helps you to export data for charts using Eloquent ORM easi
 ## Installation
 To install package, just run the following command in the root of your project:
 ```shell
-composer require mohammad-zarifiyan/laravel-chart
+composer require mohammad-zarifiyan/laravel-chart:^3.0
 ```
 ## Implementation
 First you need to give trait `MohammadZarifiyan\LaravelChart\Traits\HasChart` to your model.
