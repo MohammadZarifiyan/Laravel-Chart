@@ -7,9 +7,9 @@ composer require mohammad-zarifiyan/laravel-chart
 ```
 ## Implementation
 First you need to give trait `MohammadZarifiyan\LaravelChart\Traits\HasChart` to your model.
-Then use the `exportForChart` method to extract the information.
+Then use the `exportForChart` method to extract the data.
 1. The first parameter of this method must be an instance of `Carbon\CarbonPeriod` that specifies the beginning and end of the total time period.
-2. The second parameter of this method must be a closure that its first parameter is an instance of `Illuminate\Database\Eloquent\Builder` and its second parameter is an instance of `Carbon\CarbonPeriod`. In this closure, you must apply conditions to the `Illuminate\Database\Eloquent\Builder` that limit the data to the time period given by `Carbon\CarbonPeriod` and then return the desired information for your chart.
+2. The second parameter of this method must be a closure that its first parameter is an instance of `Illuminate\Database\Eloquent\Builder` and its second parameter is an instance of `Carbon\CarbonPeriod`. In this closure, you must apply conditions to the `Illuminate\Database\Eloquent\Builder` that limit the data to the time period given by `Carbon\CarbonPeriod` and then return the desired data for your chart.
 
 The result of `exportForChart` method is an instance of `Illuminate\Support\Collection` that includes the data you returned in the closure, so you can use them in your charts.
 
@@ -72,7 +72,7 @@ Above code output will be something like this:
     80, // Sum amount, today (till now)
 ]
 ```
-You can also filter the table information based on a column in a relation. In the example below, we get the sum of the invoices amount based on their **payment time**.
+You can also filter the table data based on a column in a relation. In the example below, we get the sum of the invoices amount based on their **payment time**.
 ```php
 <?php
 
