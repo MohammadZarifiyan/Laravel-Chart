@@ -4,7 +4,6 @@
 	"type": "library",
 	"keywords": ["Laravel", "Chart", "Eloquent-ORM", "Eloquent", "ORM"],
 	"version": "3.0.0",
-	"license": "MIT",
 	"require": {
 		"php": "^8",
 		"laravel/framework": ">=7",
